@@ -23,12 +23,14 @@ router.put(     '/users',           passport.authenticate('jwt', {session:false}
 router.delete(  '/users',           passport.authenticate('jwt', {session:false}), UserController.remove);     // D
 router.post(    '/users/login',     UserController.login);
 
-router.post(    '/companies',             passport.authenticate('jwt', {session:false}), CompanyController.create);                  // C
-router.get(     '/companies',             passport.authenticate('jwt', {session:false}), CompanyController.getAll);                  // R
+router.post(    '/movies',             passport.authenticate('jwt', {session:false}), CompanyController.create);                  // C
+router.get(     '/movies',             passport.authenticate('jwt', {session:false}), CompanyController.getAll);                  // R
 
-router.get(     '/companies/:company_id', passport.authenticate('jwt', {session:false}), custom.company, CompanyController.get);     // R
-router.put(     '/companies/:company_id', passport.authenticate('jwt', {session:false}), custom.company, CompanyController.update);  // U
-router.delete(  '/companies/:company_id', passport.authenticate('jwt', {session:false}), custom.company, CompanyController.remove);  // D
+router.get(     '/movies/:movie_id', passport.authenticate('jwt', {session:false}), custom.company, CompanyController.get);     // R
+router.put(     '/movies/:movie_id', passport.authenticate('jwt', {session:false}), custom.company, CompanyController.update);  // U
+router.delete(  '/movies/:movie_id', passport.authenticate('jwt', {session:false}), custom.company, CompanyController.remove);  // D
+
+
 
 router.get('/dash', passport.authenticate('jwt', {session:false}),HomeController.Dashboard)
 

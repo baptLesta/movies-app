@@ -41,7 +41,7 @@
   ],
   "dependencies": {
     "bluebird": "3.5.1",
-    "body-parser": "1.18.2",
+    "body-parser": "^1.18.2",
     "compression": "1.7.2",
     "cookie-parser": "1.4.3",
     "cors": "2.8.4",
@@ -61,6 +61,7 @@
     "winston": "2.4.1"
   },
   "devDependencies": {
+    "await-to-js": "^2.1.1",
     "chai": "4.1.2",
     "commitizen": "^2.9.6",
     "coveralls": "^3.0.0",
@@ -73,6 +74,7 @@
     "husky": "0.14.3",
     "istanbul": "1.1.0-alpha.1",
     "mocha": "3.5.0",
+    "parse-error": "^0.2.0",
     "supertest": "3.0.0",
     "supertest-as-promised": "4.0.2",
     "validate-commit-msg": "^2.14.0"

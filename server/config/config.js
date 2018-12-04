@@ -1,19 +1,44 @@
-require('dotenv').config();//instatiate environment variables
+const Joi = require('joi');
 
+// require and configure dotenv, will load vars in .env in PROCESS.ENV
+require('dotenv').config();
 
-let CONFIG = {} //Make this global to use all over the application
+// define validation for all the env vars
+const envVarsSchema = Joi.object({
+  NODE_ENV: Joi.string()
+    .allow(['development', 'production', 'test', 'provision'])
+    .default('development'),
+  PORT: Joi.number()
+    .default(4040),
+  MONGOOSE_DEBUG: Joi.boolean()
+    .when('NODE_ENV', {
+      is: Joi.string().equal('development'),
+      then: Joi.boolean().default(true),
+      otherwise: Joi.boolean().default(false)
+    }),
+  JWT_SECRET: Joi.string().required()
+    .description('JWT Secret required to sign'),
+  MONGO_HOST: Joi.string().required()
+    .description('Mongo DB host url'),
+  MONGO_PORT: Joi.number()
+    .default(27017)
+}).unknown()
+  .required();
 
-CONFIG.app          = process.env.APP   || 'development';
-CONFIG.port         = process.env.PORT  || '3000';
+const { error, value: envVars } = Joi.validate(process.env, envVarsSchema);
+if (error) {
+  throw new Error(`Config validation error: ${error.message}`);
+}
 
-CONFIG.db_dialect   = process.env.DB_DIALECT    || 'mongo';
-CONFIG.db_host      = process.env.DB_HOST       || 'localhost';
-CONFIG.db_port      = process.env.DB_PORT       || '27017';
-CONFIG.db_name      = process.env.DB_NAME       || 'name';
-CONFIG.db_user      = process.env.DB_USER       || 'root';
-CONFIG.db_password  = process.env.DB_PASSWORD   || 'db-password';
+const config = {
+  env: envVars.NODE_ENV,
+  port: envVars.PORT,
+  mongooseDebug: envVars.MONGOOSE_DEBUG,
+  jwtSecret: envVars.JWT_SECRET,
+  mongo: {
+    host: envVars.MONGO_HOST,
+    port: envVars.MONGO_PORT
+  }
+};
 
-CONFIG.jwt_encryption  = process.env.JWT_ENCRYPTION || 'jwt_please_change';
-CONFIG.jwt_expiration  = process.env.JWT_EXPIRATION || '10000';
-
-module.exports = CONFIG;
+module.exports = config;

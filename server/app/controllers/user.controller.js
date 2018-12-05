@@ -1,5 +1,7 @@
 const User = require('../models/user.model');
 const { to, sendError, sendSuccess } = require('../services/util.service');
+const authService = require('../services/auth.service');
+const bcrypt = require('bcrypt');
 
 /**
  * Load user and append to req.
@@ -28,13 +30,17 @@ function get(req, res) {
  * @returns {User}
  */
 async function create(req, res, next) {
-  // ME
   const {
     email,
     firstName,
     lastName,
     password
   } = req.body;
+
+  const saltRounds = 14;
+  bcrypt.hash('coucou', saltRounds, function (err, hash) {
+      //code
+  });
 
   if (!email) {
     return sendError(res, 'Please enter an email or phone number to register.');

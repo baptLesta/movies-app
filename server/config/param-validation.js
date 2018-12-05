@@ -4,8 +4,13 @@ module.exports = {
   // POST /api/users
   createUser: {
     body: {
-      username: Joi.string().required(),
-      mobileNumber: Joi.string().regex(/^[1-9][0-9]{9}$/).required()
+      username: Joi.string().min(4).required(),
+      email: Joi.string().email().required(),
+      password: Joi.string().min(6).required(),
+      profil: {
+        firstName: Joi.string(),
+        lastName: Joi.string()
+      }
     }
   },
 

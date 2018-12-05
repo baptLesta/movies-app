@@ -17,19 +17,14 @@ const user = {
  * @returns {*}
  */
 function login(req, res, next) {
-  // Ideally you'll fetch this from the db
-  // Idea here was to show how jwt works with simplicity
-  if (req.body.username === user.username && req.body.password === user.password) {
-    const token = jwt.sign({
-      username: user.username
-    }, config.jwtSecret);
-    return res.json({
-      token,
-      username: user.username
-    });
-  }
+  let userInfo = req.user;
 
-  const err = new APIError('Authentication error', httpStatus.UNAUTHORIZED, true);
+  [err, user] = await to(User.findOne({email}));
+  if (err) throwError('No user find with this email.');
+
+  [err, user] = await to(user.comparePassword(userInfo.password));
+  if (err) throwError('Wrong password.');
+
   return next(err);
 }
 

@@ -1,5 +1,6 @@
 const User = require('./user.model');
 const { to, sendError, sendSuccess } = require('../services/util.service');
+const authService = require('../services/auth.service');
 
 /**
  * Load user and append to req.
@@ -28,31 +29,18 @@ function get(req, res) {
  * @returns {User}
  */
 async function create(req, res, next) {
-  // ME
-  const {
-    email,
-    firstName,
-    lastName,
-    password
-  } = req.body;
+  const userInfo = req.body;
 
-  if (!email) {
-    return sendError(res, 'Please enter an email or phone number to register.');
-  } else if (!password) {
-    return sendError(res, 'Please enter a password to register.');
-  } else if (!firstName || !lastName) {
-    return sendError(res, 'Please enter your full name.');
-  }
-  const [err, user] = await to(authService.createUser(req.body));
-
+  // TODO : compare if existing user exist and hash password
+  const [err, user] = await to(authService.createUser(userInfo));
   if (err) return sendError(res, err, 422);
-  return sendSuccess(res,
-    {
+
+  return sendSuccess(res, {
       message: 'Successfully created new user.',
       user: user.toWeb(),
       token: user.getJWT()
-    },
-  201);
+    }, 201
+  );
 }
 
 /**

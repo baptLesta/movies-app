@@ -1,4 +1,4 @@
-const User = require('../models/user.model');
+const User = require('./user.model');
 const { to, sendError, sendSuccess } = require('../services/util.service');
 const authService = require('../services/auth.service');
 const bcrypt = require('bcrypt');
@@ -30,35 +30,16 @@ function get(req, res) {
  * @returns {User}
  */
 async function create(req, res, next) {
-  const {
-    email,
-    firstName,
-    lastName,
-    password
-  } = req.body;
+  const userInfo = req.user;
 
-  const saltRounds = 14;
-  bcrypt.hash('coucou', saltRounds, function (err, hash) {
-      //code
-  });
-
-  if (!email) {
-    return sendError(res, 'Please enter an email or phone number to register.');
-  } else if (!password) {
-    return sendError(res, 'Please enter a password to register.');
-  } else if (!firstName || !lastName) {
-    return sendError(res, 'Please enter your full name.');
-  }
-  const [err, user] = await to(authService.createUser(req.body));
-
+  const [err, user] = await to(authService.createUser(userInfo));
   if (err) return sendError(res, err, 422);
-  return sendSuccess(res,
-    {
-      message: 'Successfully created new user.',
-      user: user.toWeb(),
-      token: user.getJWT()
-    },
-  201);
+
+  return sendSuccess(res, {
+    message: 'Successfully created new user.',
+    user: user.toWeb(),
+    token: user.getJWT()
+  }, 201);
 }
 
 /**

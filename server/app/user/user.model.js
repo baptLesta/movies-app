@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const httpStatus = require('http-status');
 const validate = require('mongoose-validator');
 const APIError = require('../helpers/APIError');
+const bcrypt = require ('bcrypt');
 
 /**
  * User Schema
@@ -27,7 +28,11 @@ const UserSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now
-  }
+  },
+  movies: [{ movie: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'Movie' }
+  }]
 });
 
 /**
@@ -41,8 +46,10 @@ const UserSchema = new mongoose.Schema({
  * Methods
  */
 UserSchema.method({
-  comparePassword: (candidatePassword) => {
-      // some beautiful code..
+  comparePassword: async (candidatePassword) => {
+    const match = await bcrypt.compare(candidatePassword, this.passwordHash);
+
+    return match;
   }
 });
 

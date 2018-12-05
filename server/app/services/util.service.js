@@ -30,7 +30,7 @@ function sendSuccess(res, data, code) { // Success Web Response
   return res.json(sendData);
 }
 
-function throwError(errorMsg, log) { // TE stands for Throw Error
+function throwError(errorMsg, log) {
   if (log === true) {
     console.error(errorMsg);
   }

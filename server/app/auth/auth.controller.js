@@ -2,6 +2,8 @@ const jwt = require('jsonwebtoken');
 const httpStatus = require('http-status');
 const APIError = require('../helpers/APIError');
 const config = require('../../config/config');
+const User = require('../user/user.model');
+const {throwError} = require('../services/auth.service');
 
 // sample user, used for authentication
 const user = {
@@ -16,20 +18,16 @@ const user = {
  * @param next
  * @returns {*}
  */
-function login(req, res, next) {
-  // Ideally you'll fetch this from the db
-  // Idea here was to show how jwt works with simplicity
-  if (req.body.username === user.username && req.body.password === user.password) {
-    const token = jwt.sign({
-      username: user.username
-    }, config.jwtSecret);
-    return res.json({
-      token,
-      username: user.username
-    });
-  }
+async function login(req, res, next) {
+  const userInfo = req.user;
+  let user, err;
 
-  const err = new APIError('Authentication error', httpStatus.UNAUTHORIZED, true);
+  [err, user] = await to(User.findOne({email}));
+  if (err) throwError('No user find with this email.');
+
+  [err, user] = await to(user.comparePassword(userInfo.password));
+  if (err) throwError('Wrong password.');
+
   return next(err);
 }
 

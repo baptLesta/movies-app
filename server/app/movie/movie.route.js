@@ -1,5 +1,5 @@
 const express = require('express');
-const movieCtrl = require('../controllers/movie.controller');
+const movieCtrl = require('./movie.controller');
 
 const router = express.Router(); // eslint-disable-line new-cap
 
@@ -27,6 +27,6 @@ router
   .post(movieCtrl.addFavorite)
   
   /** GET /api/movies/favorites- Remove favorite */
-  .delete();
+  .delete(movieCtrl.removeFavorite);
 
 module.exports = router;

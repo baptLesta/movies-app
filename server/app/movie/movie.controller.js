@@ -1,4 +1,4 @@
-const Movie = require('../models/movie.model');
+const Movie = require('./movie.model');
 const { to, sendError, sendSuccess } = require('../services/util.service');
 
 /**

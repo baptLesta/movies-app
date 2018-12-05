@@ -1,6 +1,7 @@
 const Promise = require('bluebird');
 const mongoose = require('mongoose');
 const httpStatus = require('http-status');
+const validate = require('mongoose-validator');
 const APIError = require('../helpers/APIError');
 
 /**
@@ -11,11 +12,18 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  mobileNumber: {
-    type: String,
-    required: true,
-    match: [/^[1-9][0-9]{9}$/, 'The value of path {PATH} ({VALUE}) is not a valid mobile number.']
+  profile: {
+    firstName: { type: String },
+    lastName: { type: String }
   },
+  email: {
+    type: String, lowercase: true, trim: true, index: true, unique: true, sparse: true, // eslint-disable-line
+    validate: [validate({
+      validator: 'isEmail',
+      message: 'Not a valid email.',
+    })]
+  },
+  password: { type: String },
   createdAt: {
     type: Date,
     default: Date.now
@@ -33,6 +41,9 @@ const UserSchema = new mongoose.Schema({
  * Methods
  */
 UserSchema.method({
+  comparePassword: (candidatePassword) => {
+      // some beautiful code..
+  }
 });
 
 /**

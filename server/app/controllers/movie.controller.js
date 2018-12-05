@@ -1,4 +1,4 @@
-const Movie = require('./movie.model');
+const Movie = require('../models/movie.model');
 const { to, sendError, sendSuccess } = require('../services/util.service');
 
 /**
@@ -18,8 +18,9 @@ function load(req, res, next, id) {
  * @returns {Movie}
  */
 function get(req, res) {
-  let movie = req.movie;
-  return sendResponse(res, { movie: movie.toWeb() });
+  const movie = req.movie;
+
+  return sendSuccess(res, { movie: movie.toWeb() });
 }
 
 /**
@@ -44,13 +45,13 @@ async function create(req, res) {
  * @returns {Movie}
  */
 async function update(req, res, next) {
-  const err;
+  let err;
 
   let movie = req.movie;
   const data = req.body;
   movie.set(data);
 
-  [err, movie] = await to(movie.save());
+  [err, movie] = await to(movie.save()); // eslint-disable-line prefer-const
   if (err) return sendError(res, err);
 
   return sendSuccess(res, { movie: movie.toWeb() });
@@ -64,7 +65,8 @@ async function update(req, res, next) {
  */
 async function list(req, res) {
   let movies, err;
-  [err, movies] = await to(Movie.find());
+
+  [err, movies] = await to(Movie.find()); // eslint-disable-line prefer-const
   if (err) return sendError(res, err, 422);
 
   movies = movies.map(movie => movie.toWeb());
@@ -76,14 +78,14 @@ async function list(req, res) {
  * Delete movie.
  * @returns {Movie}
  */
-function remove(req, res) {
-  let company, err;
-  company = req.company;
+async function remove(req, res) {
+  let err;
+  let movie = req.company;
 
-  [err, company] = await to(company.remove());
-  if(err) return sendError(res, 'error occured trying to delete the company');
+  [err, movie] = await to(movie.remove()); // eslint-disable-line prefer-const
+  if (err) return sendError(res, 'error occured trying to delete the company');
 
-  return sendSuccess(res, {message:'Deleted Company'}, 204);
+  return sendSuccess(res, { message: 'Deleted Company' }, 204);
 }
 
 module.exports = { load, get, create, update, list, remove };

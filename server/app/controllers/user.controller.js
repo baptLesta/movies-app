@@ -1,4 +1,5 @@
-const User = require('./user.model');
+const User = require('../models/user.model');
+const { to, sendError, sendSuccess } = require('../services/util.service');
 
 /**
  * Load user and append to req.
@@ -22,19 +23,36 @@ function get(req, res) {
 
 /**
  * Create new user
- * @property {string} req.body.username - The username of user.
- * @property {string} req.body.mobileNumber - The mobileNumber of user.
+ * @property {string} req.body.email - The email of user.
+ * @property {string} req.body.password - The password of user.
  * @returns {User}
  */
-function create(req, res, next) {
-  const user = new User({
-    username: req.body.username,
-    mobileNumber: req.body.mobileNumber
-  });
+async function create(req, res, next) {
+  // ME
+  const {
+    email,
+    firstName,
+    lastName,
+    password
+  } = req.body;
 
-  user.save()
-    .then(savedUser => res.json(savedUser))
-    .catch(e => next(e));
+  if (!email) {
+    return sendError(res, 'Please enter an email or phone number to register.');
+  } else if (!password) {
+    return sendError(res, 'Please enter a password to register.');
+  } else if (!firstName || !lastName) {
+    return sendError(res, 'Please enter your full name.');
+  }
+  const [err, user] = await to(authService.createUser(req.body));
+
+  if (err) return sendError(res, err, 422);
+  return sendSuccess(res,
+    {
+      message: 'Successfully created new user.',
+      user: user.toWeb(),
+      token: user.getJWT()
+    },
+  201);
 }
 
 /**

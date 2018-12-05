@@ -1,7 +1,7 @@
 const express = require('express');
-const userRoutes = require('./server/user/user.route');
-const authRoutes = require('./server/auth/auth.route');
-const movieRoutes = require('./server/movie/movie.route');
+const userRoutes = require('./app/user/user.route');
+const authRoutes = require('./app/auth/auth.route');
+const movieRoutes = require('./app/movie/movie.route');
 
 const router = express.Router(); // eslint-disable-line new-cap
 

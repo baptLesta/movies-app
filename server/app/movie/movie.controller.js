@@ -18,24 +18,8 @@ function load(req, res, next, id) {
  * @returns {Movie}
  */
 function get(req, res) {
-  return res.json(req.movie);
-}
-
-/**
- * Create new movie
- * @property {string} req.body.title - The title of movie.
- * @property {string} req.body.description - The description of movie.
- * @returns {Movie}
- */
-function create(req, res, next) {
-  const movie = new Movie({
-    title: req.body.title,
-    description: req.body.description
-  });
-
-  movie.save()
-    .then(savedMovie => res.json(savedMovie))
-    .catch(e => next(e));
+  let movie = req.movie;
+  return sendResponse(res, { movie: movie.toWeb() });
 }
 
 /**
@@ -59,14 +43,17 @@ async function create(req, res) {
  * @property {string} req.body.description - The description of movie.
  * @returns {Movie}
  */
-function update(req, res, next) {
-  const movie = req.movie;
-  movie.title = req.body.title;
-  movie.description = req.body.description;
+async function update(req, res, next) {
+  const err;
 
-  movie.save()
-    .then(savedMovie => res.json(savedMovie))
-    .catch(e => next(e));
+  let movie = req.movie;
+  const data = req.body;
+  movie.set(data);
+
+  [err, movie] = await to(movie.save());
+  if (err) return sendError(res, err);
+
+  return sendSuccess(res, { movie: movie.toWeb() });
 }
 
 /**
@@ -75,22 +62,28 @@ function update(req, res, next) {
  * @property {number} req.query.limit - Limit number of movies to be returned.
  * @returns {Movie[]}
  */
-function list(req, res, next) {
-  const { limit = 50, skip = 0 } = req.query;
-  Movie.list({ limit, skip })
-    .then(movies => res.json(movies))
-    .catch(e => next(e));
+async function list(req, res) {
+  let movies, err;
+  [err, movies] = await to(Movie.find());
+  if (err) return sendError(res, err, 422);
+
+  movies = movies.map(movie => movie.toWeb());
+
+  return sendSuccess(res, { movies });
 }
 
 /**
  * Delete movie.
  * @returns {Movie}
  */
-function remove(req, res, next) {
-  const movie = req.movie;
-  movie.remove()
-    .then(deletedMovie => res.json(deletedMovie))
-    .catch(e => next(e));
+function remove(req, res) {
+  let company, err;
+  company = req.company;
+
+  [err, company] = await to(company.remove());
+  if(err) return sendError(res, 'error occured trying to delete the company');
+
+  return sendSuccess(res, {message:'Deleted Company'}, 204);
 }
 
-module.exports = { load, get, create, createBis, update, list, remove };
+module.exports = { load, get, create, update, list, remove };

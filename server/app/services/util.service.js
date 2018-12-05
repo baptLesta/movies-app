@@ -10,10 +10,10 @@ module.exports.to = async (promise) => {
 
 function sendError(res, err, code) { // Error Web Response
   if (typeof err === 'object' && typeof err.message !== 'undefined') {
-    err = err.message;
+    err = err.message; // eslint-disable-line
   }
 
-  if (typeof code !== 'undefined') res.statusCode = code;
+  if (typeof code !== 'undefined') res.statusCode = code; // eslint-disable-line
 
   return res.json({ success: false, error: err });
 }
@@ -25,7 +25,7 @@ function sendSuccess(res, data, code) { // Success Web Response
     sendData = Object.assign(data, sendData); // merge the objects
   }
 
-  if (typeof code !== 'undefined') res.statusCode = code;
+  if (typeof code !== 'undefined') res.statusCode = code; // eslint-disable-line
 
   return res.json(sendData);
 }

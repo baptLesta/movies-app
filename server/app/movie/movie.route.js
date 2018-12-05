@@ -5,7 +5,11 @@ const router = express.Router(); // eslint-disable-line new-cap
 
 router
   .route('/')
-  .get(movieCtrl.get)
-  .post(movieCtrl.createBis);
+  .get(movieCtrl.list)
+  .post(movieCtrl.create);
+
+router
+  .route('/:movie_id')
+  .get(movieCtrl.get);
 
 module.exports = router;

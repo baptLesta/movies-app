@@ -28,11 +28,13 @@ const MovieSchema = new mongoose.Schema({
 /**
  * Methods
  */
-MovieSchema.methods.toWeb = function () {
-  const json = this.toJSON();
-  json.id = this._id; // this is for the front end
-  return json;
-};
+MovieSchema.method({
+  toWeb: () => {
+    const json = this.toJSON();
+    json.id = this._id; // this is for the front end
+    return json;
+  }
+});
 
 /**
  * Statics

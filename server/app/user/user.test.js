@@ -20,8 +20,9 @@ after((done) => {
 
 describe('## User APIs', () => {
   let user = {
-    username: 'KK123',
-    mobileNumber: '1234567890'
+    username: 'vueJs',
+    email: 'vue@test.fr',
+    password: 'express'
   };
 
   describe('# POST /api/users', () => {

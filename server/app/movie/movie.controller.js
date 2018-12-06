@@ -80,7 +80,7 @@ async function list(req, res) {
  */
 async function remove(req, res) {
   let err;
-  let movie = req.company;
+  let movie = req.movie;
 
   [err, movie] = await to(movie.remove()); // eslint-disable-line prefer-const
   if (err) return sendError(res, 'error occured trying to delete the company');

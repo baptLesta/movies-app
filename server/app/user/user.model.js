@@ -3,7 +3,10 @@ const mongoose = require('mongoose');
 const httpStatus = require('http-status');
 const validate = require('mongoose-validator');
 const APIError = require('../helpers/APIError');
-const bcrypt = require ('bcrypt');
+const bcrypt = require('bcrypt');
+const CONFIG = require('../../config/config');
+const jwt = require('jsonwebtoken');
+const { throwError, to } = require('../services/util.service');
 
 /**
  * User Schema
@@ -46,10 +49,24 @@ const UserSchema = new mongoose.Schema({
  * Methods
  */
 UserSchema.method({
-  comparePassword: async (candidatePassword) => {
-    const match = await bcrypt.compare(candidatePassword, this.passwordHash);
+  toWeb: function () { // eslint-disable-line
+    const json = this.toJSON();
+    json.id = this._id;
+    return json;
+  },
+  comparePassword: async function (candidatePassword) { // eslint-disable-line
+    const [err, match] = await to(bcrypt.compare(candidatePassword, this.password));
+    if (err) throwError();
+    if (!match) throwError('Wrong password');
 
-    return match;
+    return this;
+  },
+  getJWT: function () { // eslint-disable-line
+    const expirationTime = parseInt(CONFIG.jwtExpiration);
+    return `Bearer ${
+      jwt.sign({ user_id: this._id },
+      CONFIG.jwtEncryption, { expiresIn: expirationTime })
+    }`;
   }
 });
 

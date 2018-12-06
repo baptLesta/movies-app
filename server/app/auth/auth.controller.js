@@ -3,7 +3,7 @@ const httpStatus = require('http-status');
 const APIError = require('../helpers/APIError');
 const config = require('../../config/config');
 const User = require('../user/user.model');
-const {throwError} = require('../services/auth.service');
+const { throwError, to, sendSuccess } = require('../services/util.service');
 
 // sample user, used for authentication
 const user = {
@@ -19,16 +19,21 @@ const user = {
  * @returns {*}
  */
 async function login(req, res, next) {
-  const userInfo = req.user;
-  let user, err;
+  const userInfo = req.body;
+  const { password, email } = userInfo;
+  let candidateUser, user, err;
 
-  [err, user] = await to(User.findOne({email}));
+  [err, candidateUser] = await to(User.findOne({ email }));
   if (err) throwError('No user find with this email.');
 
-  [err, user] = await to(user.comparePassword(userInfo.password));
+  [err, user] = await to(candidateUser.comparePassword(password));
   if (err) throwError('Wrong password.');
 
-  return next(err);
+  return sendSuccess(res, {
+    message: 'Successfully login.',
+    user: user.toWeb(),
+    token: user.getJWT()
+  }, 201);
 }
 
 /**

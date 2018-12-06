@@ -30,7 +30,7 @@ function get(req, res) {
  * @returns {User}
  */
 async function create(req, res, next) {
-  const userInfo = req.user;
+  const userInfo = req.body;
 
   const [err, user] = await to(authService.createUser(userInfo));
   if (err) return sendError(res, err, 422);
@@ -75,11 +75,18 @@ function list(req, res, next) {
  * Delete user.
  * @returns {User}
  */
-function remove(req, res, next) {
-  const user = req.user;
-  user.remove()
-    .then(deletedUser => res.json(deletedUser))
-    .catch(e => next(e));
+async function remove(req, res, next) {
+  const userInfo = req.body;
+  console.log(req);
+
+  // const [err, user] = await to(User.remove(userInfo));
+  // if (err) return sendError(res, err, 422);
+
+  // return sendSuccess(res, {
+  //   message: 'Successfully removed new user.',
+  //   user: user.toWeb(),
+  //   token: user.getJWT()
+  // }, 201);
 }
 
 module.exports = { load, get, create, update, list, remove };

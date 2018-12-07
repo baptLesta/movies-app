@@ -1,5 +1,5 @@
-const User = require('../user/user.model');
-const { to, sendError, sendSuccess } = require('../services/util.service');
+const User = require('../user.model');
+const { to, sendError, sendSuccess } = require('../../services/util.service');
 
 /**
  * Create new movie

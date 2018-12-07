@@ -5,11 +5,11 @@ import LayoutList from '@/components/LayoutList'
 Vue.use(Router)
 
 export default new Router({
-	mode: 'history',
-	routes: [
-		{
-			path: '/',
-			component: LayoutList
-		}
-	]
+  mode: 'history',
+  routes: [
+    {
+      path: '/',
+      component: LayoutList
+    }
+  ]
 })

@@ -1,12 +1,12 @@
 <template>
-	<div class="LayoutList">
-		LayoutList
-	</div>
+  <div class="LayoutList">
+    LayoutList
+  </div>
 </template>
 
 <script>
 export default {
-	name: 'LayoutList'
+  name: 'LayoutList'
 }
 </script>
 

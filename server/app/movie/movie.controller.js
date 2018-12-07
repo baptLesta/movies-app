@@ -64,9 +64,10 @@ async function update(req, res, next) {
  * @returns {Movie[]}
  */
 async function list(req, res) {
+  const { limit = 50, skip = 0 } = req.query;
   let movies, err;
 
-  [err, movies] = await to(Movie.find()); // eslint-disable-line prefer-const
+  [err, movies] = await to(Movie.list({ limit, skip })); // eslint-disable-line prefer-const
   if (err) return sendError(res, err, 422);
 
   movies = movies.map(movie => movie.toWeb());

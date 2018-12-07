@@ -12,7 +12,7 @@ const MovieSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  description: {
+  plot: {
     type: String,
     required: true
   }
@@ -29,7 +29,7 @@ const MovieSchema = new mongoose.Schema({
  * Methods
  */
 MovieSchema.method({
-  toWeb: () => {
+  toWeb: function() { // eslint-disable-line
     const json = this.toJSON();
     json.id = this._id; // this is for the front end
     return json;

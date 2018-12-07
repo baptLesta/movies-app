@@ -1,4 +1,4 @@
-const Movie = require('./movie.model');
+const User = require('../user/user.model');
 const { to, sendError, sendSuccess } = require('../services/util.service');
 
 /**
@@ -9,11 +9,13 @@ const { to, sendError, sendSuccess } = require('../services/util.service');
  */
 async function add(req, res) {
   const movie = req.movie;
+  let err;
   let user = req.user;
 
-  user.movies = [{movie: movie._id}];
+  user.movies = [{ movie: movie._id }];
+  console.log(user);
 
-  const [err, movie] = await to(User.create(userInfo));
+  [err, user] = await to(User.create(user));
   if (err) return sendError(res, err);
 
   return sendSuccess(res, { user: user.toWeb() }, 201);
@@ -51,4 +53,4 @@ async function remove(req, res) {
   return sendSuccess(res, { message: 'Deleted favorites' }, 204);
 }
 
-module.exports = { load, get, create, update, list, remove };
+module.exports = { add, list, remove };

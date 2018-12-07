@@ -6,20 +6,18 @@ const movieCheck = require('../movie/movie.middleware');
 const router = express.Router(); // eslint-disable-line new-cap
 
 router
-  .route('/')
-  .user(authCheck)
+  .route('/movies')
 
   /** GET /api/favorites - Get list of favorites for the connected user*/
-  .get(favoriteCtrl.list);
+  .get(authCheck, favoriteCtrl.list);
 
 router
-  .route('/:movieId')
-  .user(movieCheck)
+  .route('/movies/:movieId')
 
   /** POST /api/favorites - Add new favorite */
-  .post(favoriteCtrl.add)
-  
+  .post(...authCheck, movieCheck, favoriteCtrl.add)
+
   /** POST /api/favorites - Remove favorite */
-  .delete(favoriteCtrl.remove);
+  .delete(movieCheck, favoriteCtrl.remove);
 
 module.exports = router;

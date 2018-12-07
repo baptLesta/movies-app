@@ -2,7 +2,7 @@ const express = require('express');
 const userRoutes = require('./app/user/user.route');
 const authRoutes = require('./app/auth/auth.route');
 const movieRoutes = require('./app/movie/movie.route');
-const favoriteRoutes = require('./app/favorite/favorite.route');
+const favoriteRoutes = require('./app/user/favorite/favorite.route');
 const { sendError } = require('./app/services/util.service');
 
 const router = express.Router(); // eslint-disable-line new-cap

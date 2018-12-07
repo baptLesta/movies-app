@@ -1,10 +1,6 @@
 const User = require('../user/user.model');
-// const validator = require('validator');
 const bcrypt = require('bcrypt');
-const {
-  to,
-  throwError
-} = require('../services/util.service');
+const { to, throwError } = require('../services/util.service');
 
 /**
 * Returns jwt token if valid username and password is provided
@@ -15,15 +11,13 @@ const {
 async function createUser(userInfo) {
   const saltRounds = 10;
   const { email, password } = userInfo;
-  let authInfo, err, hash, user;
+  let err, hash, user;
 
   let existingUser;
   [err, existingUser] = await to(User.findOne({ email }));
   if (existingUser) throwError('That email is already use.');
 
-  [err, hash] = await to(
-    bcrypt.hash(password, saltRounds)
-  );
+  [err, hash] = await to(bcrypt.hash(password, saltRounds));
   if (err) throwError('Error occurs during the hash of the password.');
   userInfo.password = hash;
 
@@ -33,6 +27,4 @@ async function createUser(userInfo) {
   return user;
 }
 
-module.exports = {
-  createUser
-};
+module.exports = { createUser };

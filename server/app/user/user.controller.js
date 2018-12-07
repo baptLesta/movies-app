@@ -1,18 +1,20 @@
 const User = require('./user.model');
 const { to, sendError, sendSuccess } = require('../services/util.service');
-const authService = require('../services/auth.service');
+const authService = require('../auth/auth.service');
 const bcrypt = require('bcrypt');
+const httpStatus = require('http-status');
 
 /**
  * Load user and append to req.
  */
-function load(req, res, next, id) {
-  User.get(id)
-    .then((user) => {
-      req.user = user; // eslint-disable-line no-param-reassign
-      return next();
-    })
-    .catch(e => next(e));
+async function load(req, res, next, id) {
+  const userId = req.user.user_id;
+
+  const [err, user] = await to(User.findOne({ _id: userId }));
+  if (err) return sendError(res, 'No user found.', httpStatus.NOT_FOUND);
+
+  req.user = user; // eslint-disable-line
+  next();
 }
 
 /**
@@ -76,17 +78,14 @@ function list(req, res, next) {
  * @returns {User}
  */
 async function remove(req, res, next) {
-  const userInfo = req.body;
-  console.log(req);
+  const user = req.user;
 
-  // const [err, user] = await to(User.remove(userInfo));
-  // if (err) return sendError(res, err, 422);
+  const [err, user] = await to(User.remove(userInfo));
+  if (err) return sendError(res, err, 422);
 
-  // return sendSuccess(res, {
-  //   message: 'Successfully removed new user.',
-  //   user: user.toWeb(),
-  //   token: user.getJWT()
-  // }, 201);
+  return sendSuccess(res, {
+    message: 'Successfully removed new user.'
+  }, 204);
 }
 
 module.exports = { load, get, create, update, list, remove };

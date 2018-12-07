@@ -27,12 +27,9 @@ async function add(req, res) {
  * @returns {Movie[]}
  */
 async function list(req, res) {
-  let movies, err;
   const user = req.user;
 
-  [err, movies] = await to(user.Movies()); // eslint-disable-line prefer-const
-  if (err) return sendError(res, err, 422);
-
+  let movies = user.movies;
   movies = movies.map(movie => movie.toWeb());
 
   return sendSuccess(res, { movies });
@@ -47,10 +44,10 @@ async function remove(req, res) {
   let movie = req.movie;
   let user = req.user;
 
-  [err, user] = await to(user.movies.pull({_id: movie._id})); // eslint-disable-line prefer-const
-  if (err) return sendError(res, 'error occured trying to delete the company');
+  [err, user] = await to(user.movies.pull({ _id: movie._id })); // eslint-disable-line prefer-const
+  if (err) return sendError(res, 'Error occured trying to delete the company.');
 
-  return sendSuccess(res, { message: 'Deleted favorites' }, 204);
+  return sendSuccess(res, { message: 'Favorite removed.' }, 204);
 }
 
 module.exports = { add, list, remove };

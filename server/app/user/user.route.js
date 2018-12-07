@@ -1,28 +1,31 @@
 const express = require('express');
 const validate = require('express-validation');
 const paramValidation = require('../../config/param-validation');
+const authChecker = require('../auth/auth.middleware');
 const userCtrl = require('./user.controller');
-const jwt = require('express-jwt');
-const config = require('../../config/config');
+const favoriteRoutes = require('./favorite/user.favorite.route');
 
 const router = express.Router(); // eslint-disable-line new-cap
 
 router.route('/')
-  /** GET /api/users - Get list of users */
+  /** TODO GET /api/users - Get list of users */
   .get(userCtrl.list)
 
   /** POST /api/users - Create new user */
   .post(validate(paramValidation.createUser), userCtrl.create);
 
 router.route('/:userId')
-  /** GET /api/users/:userId - Get user */
+  /** TOTEST GET /api/users/:userId - Get user */
   .get(userCtrl.get)
 
-  /** PUT /api/users/:userId - Update user */
+  /** TODO PUT /api/users/:userId - Update user */
   .put(validate(paramValidation.updateUser), userCtrl.update)
 
-  /** DELETE /api/users/:userId - Delete user */
-  .delete(jwt({ secret: config.jwtEncryption }), userCtrl.remove);
+  /** TOTEST DELETE /api/users/:userId - Delete user */
+  .delete(authChecker, userCtrl.remove);
+
+// mount favorite routes at /favorites
+router.use('/favorites', favoriteRoutes);
 
 /** Load user when API with userId route parameter is hit */
 router.param('userId', userCtrl.load);

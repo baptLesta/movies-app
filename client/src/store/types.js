@@ -1,1 +1,2 @@
-export const GET_EXAMPLE = 'GET_EXAMPLE'
+export const LOGIN = 'LOGIN'
+export const SET_USER = 'LOGIN'

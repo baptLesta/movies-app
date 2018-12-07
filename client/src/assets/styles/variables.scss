@@ -1,3 +1,20 @@
+// TYPO
+@font-face {
+	font-family: 'CircularStd-Book';
+	src: url('/static/fonts/CircularStd-Book.woff') format('woff');
+}
+
+@font-face {
+	font-family: 'CircularStd-Bold';
+	src: url('/static/fonts/CircularStd-Bold.woff') format('woff');
+}
+
+@font-face {
+	font-family: 'CircularStd-Black';
+	src: url('/static/fonts/CircularStd-Black.woff') format('woff');
+}
+
+
 // COLORS
 $blue-grey: #EFF2F7;
 $grey-light: #f9fafc;
@@ -5,3 +22,4 @@ $blue-accent: #2EB9FF;
 $purple: #647A9D;
 $purple-accent: #575CDF;
 $grey: #8691A3;
+$red: red;

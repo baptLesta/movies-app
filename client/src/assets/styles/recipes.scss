@@ -1,3 +1,23 @@
+@mixin recipe-title-big {
+	font-family: 'CircularStd-Black';
+	font-size: 72px;
+}
+
+@mixin recipe-title {
+	font-family: 'CircularStd-Book';
+	font-size: 72px;
+}
+
+@mixin recipe-title {
+	font-family: 'CircularStd-Book';
+	font-size: 38px;
+}
+
+@mixin recipe-text-small {
+	font-family: 'CircularStd-Book';
+	font-size: 20px;
+}
+
 @mixin recipe-text-small {
 	font-size: 14px;
 	font-weight: 400;

@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import LayoutList from '@/components/LayoutList'
+import LayoutConnexion from '@/components/LayoutConnexion'
 
 Vue.use(Router)
 
@@ -9,7 +9,7 @@ export default new Router({
   routes: [
     {
       path: '/',
-      component: LayoutList
+      component: LayoutConnexion
     }
   ]
 })

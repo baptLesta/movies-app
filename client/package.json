@@ -14,6 +14,7 @@
   "dependencies": {
     "autosize": "^4.0.2",
     "axios": "^0.18.0",
+    "element-ui": "^2.4.11",
     "sass-lint-vue": "^0.2.1",
     "stylelint-scss": "^3.4.0",
     "vue": "^2.5.2",

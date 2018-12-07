@@ -1,12 +1,12 @@
 <template>
-  <div class="LayoutList">
-    LayoutList
-  </div>
+    <div class="TheFormRegister">
+
+    </div>
 </template>
 
 <script>
 export default {
-  name: 'LayoutList'
+    name: 'TheFormRegister'
 }
 </script>
 
@@ -14,7 +14,7 @@ export default {
 
 @import '@/assets/styles/main.scss';
 
-.LayoutList {
+.TheFormRegister {
 
 }
 </style>
